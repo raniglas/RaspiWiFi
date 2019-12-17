@@ -32,6 +32,8 @@ def wpa_check_activate(wpa_enabled, wpa_key):
 				if 'wpa_passphrase' in line:
 					if 'wpa_passphrase=' + wpa_key not in line:
 						print('wpa_passphrase=' + wpa_key)
+						os.system('wall "RaspiWifi will reboot in 60 seconds (reset_lib.py 1)"')
+						time.sleep(60)
 						os.system('reboot')
 					else:
 						print(line, end = '')
@@ -90,4 +92,6 @@ def reset_to_host_mode():
 		os.system('cp /usr/lib/raspiwifi/reset_device/static_files/dnsmasq.conf /etc/')
 		os.system('cp /usr/lib/raspiwifi/reset_device/static_files/dhcpcd.conf /etc/')
 		os.system('touch /etc/raspiwifi/host_mode')
+	os.system('wall "RaspiWifi will reboot in 60 seconds (reset_lib.py 2)"')
+	time.sleep(60)
 	os.system('reboot')

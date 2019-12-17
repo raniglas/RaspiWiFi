@@ -4,8 +4,10 @@ import time
 import subprocess
 import reset_lib
 
+GPIO_NUM = 26
+
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(GPIO_NUM, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 counter = 0
 serial_last_four = subprocess.check_output(['cat', '/proc/cpuinfo'])[-5:-1].decode('utf-8')
@@ -19,12 +21,14 @@ reboot_required = reset_lib.wpa_check_activate(config_hash['wpa_enabled'], confi
 reboot_required = reset_lib.update_ssid(ssid_prefix, serial_last_four)
 
 if reboot_required == True:
+    os.system('wall "RaspiWifi will reboot in 60 seconds (reset.py)"')
+    time.sleep(60)
     os.system('reboot')
 
-# This is the main logic loop waiting for a button to be pressed on GPIO 18 for 10 seconds.
+# This is the main logic loop waiting for a button to be pressed on GPIO_NUM for 10 seconds.
 # If that happens the device will reset to its AP Host mode allowing for reconfiguration on a new network.
 while True:
-    while GPIO.input(18) == 1:
+    while GPIO.input(GPIO_NUM) == 1:
         time.sleep(1)
         counter = counter + 1
 
@@ -33,7 +37,7 @@ while True:
         if counter == 9:
             reset_lib.reset_to_host_mode()
 
-        if GPIO.input(18) == 0:
+        if GPIO.input(GPIO_NUM) == 0:
             counter = 0
             break
 

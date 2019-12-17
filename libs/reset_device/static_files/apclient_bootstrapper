@@ -1,5 +1,5 @@
 #!/bin/bash
 
-python3 /usr/lib/raspiwifi/reset_device/reset.py &
+python3 /usr/lib/raspiwifi/reset_device/reset.py >> /var/log/raspiwifi.log 2>&1 &
 
-python3 /usr/lib/raspiwifi/reset_device/connection_monitor.py &
+python3 /usr/lib/raspiwifi/reset_device/connection_monitor.py >> /var/log/raspiwifi.log 2>&1 &
